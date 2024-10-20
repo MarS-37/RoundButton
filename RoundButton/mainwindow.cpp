@@ -1,24 +1,21 @@
 #include "mainwindow.h"
 #include <QVBoxLayout>
+#include <QHBoxLayout>
 
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), dialog(new DemoDialog(this))
 {
     QWidget *centralWidget = new QWidget(this);
-    QVBoxLayout *layout = new QVBoxLayout(centralWidget);
 
-    label = new QLabel("Label", this);
-    layout->addWidget(label);
+    // основной вертикальный лейаут
+    QVBoxLayout *mainLayout = new QVBoxLayout(centralWidget);
 
-    lineEdit = new QLineEdit(this);
-    layout->addWidget(lineEdit);
+    // горизонтальный лейаут для кнопки в правом верхнем углу
+    QHBoxLayout *buttonLayout = new QHBoxLayout();
 
     // кнопка "OD"
     button = new QPushButton("OD", this);
-
-    // делаем кнопку круглой с помощью QSS
-    // устанавливаем фиксированный размер кнопки
-    button->setFixedSize(50, 50);
+    button->setFixedSize(50, 50);    // устанавливаем фиксированный размер кнопки
     button->setStyleSheet(
         "QPushButton {"
         "  border-radius: 25px;"     // радиус равен половине ширины/высоты для круглой формы
@@ -31,8 +28,19 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), dialog(new DemoDi
         "}"
         );
 
-    // центрируем кнопку
-    layout->addWidget(button, 0, Qt::AlignCenter);
+    // добавляем кнопку в правый верхний угол
+    buttonLayout->addStretch();  // добавляем растяжение перед кнопкой, чтобы выровнять её вправо
+    buttonLayout->addWidget(button, 0, Qt::AlignRight);
+
+    // добавляем горизонтальный лейаут с кнопкой в основной лейаут
+    mainLayout->addLayout(buttonLayout);
+
+    // остальные элементы интерфейса
+    label = new QLabel("Label", this);
+    mainLayout->addWidget(label);
+
+    lineEdit = new QLineEdit(this);
+    mainLayout->addWidget(lineEdit);
 
     connect(button, &QPushButton::clicked, this, &MainWindow::openDialog);
 
@@ -48,7 +56,8 @@ MainWindow::~MainWindow() {}
 
 void MainWindow::openDialog()
 {
-    dialog->exec();  // открываем модальное окно
+    // открываем модальное окно
+    dialog->exec();
 }
 
 void MainWindow::setLabelText(const QString &text)
