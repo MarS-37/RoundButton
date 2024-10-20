@@ -20,12 +20,14 @@ private slots:
     void openDialog();
     void setLabelText(const QString &text);
     void setLineEditText(const QString &text);
+    void changeButtonColor();
 
 private:
     QLabel *label;
     QLineEdit *lineEdit;
     QPushButton *button;
     DemoDialog *dialog;
+    bool isButtonPressed;  // флаг кнопки
 };
 
 #endif // MAINWINDOW_H

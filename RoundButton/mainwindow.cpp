@@ -3,7 +3,7 @@
 #include <QHBoxLayout>
 
 
-MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), dialog(new DemoDialog(this))
+MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), dialog(new DemoDialog(this)), isButtonPressed(false)
 {
     QWidget *centralWidget = new QWidget(this);
 
@@ -15,16 +15,14 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), dialog(new DemoDi
 
     // кнопка "OD"
     button = new QPushButton("OD", this);
-    button->setFixedSize(50, 50);    // устанавливаем фиксированный размер кнопки
+    // устанавливаем фиксированный размер кнопки
+    button->setFixedSize(50, 50);
     button->setStyleSheet(
         "QPushButton {"
-        "  border-radius: 25px;"     // радиус равен половине ширины/высоты для круглой формы
+        "  border-radius: 25px;"        // радиус равен половине ширины/высоты для круглой формы
         "  border: 2px solid #555;"
-        "  background-color: #ddd;"
+        "  background-color: #ddd;"     // начальный цвет кнопки
         "  font-size: 16px;"
-        "}"
-        "QPushButton:pressed {"
-        "  background-color: #aaa;"  // изменение фона при нажатии
         "}"
         );
 
@@ -42,7 +40,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), dialog(new DemoDi
     lineEdit = new QLineEdit(this);
     mainLayout->addWidget(lineEdit);
 
-    connect(button, &QPushButton::clicked, this, &MainWindow::openDialog);
+    connect(button, &QPushButton::clicked, this, &MainWindow::changeButtonColor);   // сигнал изменения цвета
+    connect(button, &QPushButton::clicked, this, &MainWindow::openDialog);          // сигнал открытия диалога
 
     setCentralWidget(centralWidget);
     setWindowTitle("Main Window");
@@ -68,4 +67,19 @@ void MainWindow::setLabelText(const QString &text)
 void MainWindow::setLineEditText(const QString &text)
 {
     lineEdit->setText(text);
+}
+
+void MainWindow::changeButtonColor()
+{
+    if (!isButtonPressed) {
+        button->setStyleSheet(
+            "QPushButton {"
+            "  border-radius: 25px;"
+            "  border: 2px solid #555;"
+            "  background-color: orange;"  // меняем цвет на оранжевый
+            "  font-size: 16px;"
+            "}"
+            );
+        isButtonPressed = true;  // обновляем состояние флага
+    }
 }
