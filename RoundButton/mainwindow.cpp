@@ -13,8 +13,26 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), dialog(new DemoDi
     lineEdit = new QLineEdit(this);
     layout->addWidget(lineEdit);
 
-    button = new QPushButton("Open Dialog", this);
-    layout->addWidget(button);
+    // кнопка "OD"
+    button = new QPushButton("OD", this);
+
+    // делаем кнопку круглой с помощью QSS
+    // устанавливаем фиксированный размер кнопки
+    button->setFixedSize(50, 50);
+    button->setStyleSheet(
+        "QPushButton {"
+        "  border-radius: 25px;"     // радиус равен половине ширины/высоты для круглой формы
+        "  border: 2px solid #555;"
+        "  background-color: #ddd;"
+        "  font-size: 16px;"
+        "}"
+        "QPushButton:pressed {"
+        "  background-color: #aaa;"  // изменение фона при нажатии
+        "}"
+        );
+
+    // центрируем кнопку
+    layout->addWidget(button, 0, Qt::AlignCenter);
 
     connect(button, &QPushButton::clicked, this, &MainWindow::openDialog);
 
@@ -30,8 +48,7 @@ MainWindow::~MainWindow() {}
 
 void MainWindow::openDialog()
 {
-    // открываем модальное окно
-    dialog->exec();
+    dialog->exec();  // открываем модальное окно
 }
 
 void MainWindow::setLabelText(const QString &text)
